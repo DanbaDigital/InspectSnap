@@ -15,6 +15,7 @@ f:SetScript("OnEvent", function(self, event, guid)
 end)
 
 function InspectSnap:ShowInspectFrame(gear)
+    self.currentGear = gear
     if not self.inspectFrame then
         self.inspectFrame = CreateFrame("Frame", "InspectSnapFrame", UIParent)
         self.inspectFrame:SetSize(400, 300)
@@ -48,9 +49,9 @@ function InspectSnap:ShowInspectFrame(gear)
             button:SetPoint("TOPLEFT", 20 + ((i-1) % 5) * 70, -40 - math.floor((i-1) / 5) * 40)
             button:SetNormalTexture("Interface\\PaperDoll\\UI-PaperDoll-Slot-Generic")
             button:SetScript("OnEnter", function()
-                if gear[i] and gear[i] ~= "Empty" then
+                if InspectSnap.currentGear and InspectSnap.currentGear[i] and InspectSnap.currentGear[i] ~= "Empty" then
                     GameTooltip:SetOwner(button, "ANCHOR_RIGHT")
-                    GameTooltip:SetHyperlink(gear[i])
+                    GameTooltip:SetHyperlink(InspectSnap.currentGear[i])
                     GameTooltip:Show()
                 end
             end)
@@ -58,9 +59,9 @@ function InspectSnap:ShowInspectFrame(gear)
                 GameTooltip:Hide()
             end)
             button:SetScript("OnClick", function()
-                if gear[i] and gear[i] ~= "Empty" then
+                if InspectSnap.currentGear and InspectSnap.currentGear[i] and InspectSnap.currentGear[i] ~= "Empty" then
                     if IsShiftKeyDown() then
-                        ChatEdit_InsertLink(gear[i])
+                        ChatEdit_InsertLink(InspectSnap.currentGear[i])
                     end
                 end
             end)
