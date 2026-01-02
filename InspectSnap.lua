@@ -51,7 +51,7 @@ function InspectSnap:ShowInspectFrame(gear)
             button:SetScript("OnEnter", function()
                 if InspectSnap.currentGear and InspectSnap.currentGear[i] and InspectSnap.currentGear[i] ~= "Empty" then
                     GameTooltip:SetOwner(button, "ANCHOR_RIGHT")
-                    GameTooltip:SetHyperlink(InspectSnap.currentGear[i])
+                    pcall(function() GameTooltip:SetHyperlink(InspectSnap.currentGear[i]) end)
                     GameTooltip:Show()
                 end
             end)
@@ -76,8 +76,8 @@ function InspectSnap:ShowInspectFrame(gear)
         local button = self.gearButtons[i]
         local link = gear[i]
         if link and link ~= "Empty" then
-            local _, _, _, _, _, _, _, _, _, texture = GetItemInfo(link)
-            if texture then
+            local success, _, _, _, _, _, _, _, _, texture = pcall(GetItemInfo, link)
+            if success and texture then
                 button:SetNormalTexture(texture)
             else
                 button:SetNormalTexture("Interface\\PaperDoll\\UI-PaperDoll-Slot-Generic")
