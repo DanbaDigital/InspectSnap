@@ -75,9 +75,11 @@ function InspectSnap:ShowInspectFrame(gear)
         local button = self.gearButtons[i]
         local link = gear[i]
         if link and link ~= "Empty" then
-            local texture = GetItemIcon(link)
+            local _, _, _, _, _, _, _, _, _, texture = GetItemInfo(link)
             if texture then
                 button:SetNormalTexture(texture)
+            else
+                button:SetNormalTexture("Interface\\PaperDoll\\UI-PaperDoll-Slot-Generic")
             end
         else
             button:SetNormalTexture("Interface\\PaperDoll\\UI-PaperDoll-Slot-Generic")
