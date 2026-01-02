@@ -6,4 +6,3 @@
 ## SavedVariables: InspectSnapDB
 
 InspectSnap.lua
-InspectSnap.xml

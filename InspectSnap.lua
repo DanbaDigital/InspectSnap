@@ -14,15 +14,6 @@ f:SetScript("OnEvent", function(self, event, guid)
     end
 end)
 
--- Hook the default InspectFrame to attempt preventing auto-close
-if InspectFrame then
-    InspectFrame:HookScript("OnHide", function()
-        if InspectSnapDB.enabled and UnitExists("target") and CheckInteractDistance("target", 1) then
-            InspectFrame:Show()
-        end
-    end)
-end
-
 function InspectSnap:ShowInspectFrame(gear)
     if not self.inspectFrame then
         self.inspectFrame = CreateFrame("Frame", "InspectSnapFrame", UIParent)
