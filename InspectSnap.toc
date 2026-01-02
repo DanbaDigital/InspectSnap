@@ -1,0 +1,9 @@
+## Interface: 11200
+## Title: InspectSnap
+## Author: Xiroy
+## Version: 1.0.0
+## Notes: Snaps inspected characters to allow gear inspection while moving away.
+## SavedVariables: InspectSnapDB
+
+InspectSnap.lua
+InspectSnap.xml
