@@ -17,7 +17,7 @@ end)
 function InspectSnap:ShowInspectFrame(gear)
     if not self.inspectFrame then
         self.inspectFrame = CreateFrame("Frame", "InspectSnapFrame", UIParent)
-        self.inspectFrame:SetSize(300, 400)
+        self.inspectFrame:SetSize(400, 300)
         self.inspectFrame:SetPoint("CENTER")
         self.inspectFrame:SetBackdrop({
             bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",
@@ -38,17 +38,50 @@ function InspectSnap:ShowInspectFrame(gear)
         title:SetPoint("TOP", 0, -10)
         title:SetText("InspectSnap")
 
-        self.gearTexts = {}
+        self.gearButtons = {}
+        local slotNames = {
+            [1] = "Head", [2] = "Neck", [3] = "Shoulder", [4] = "Shirt", [5] = "Chest", [6] = "Waist", [7] = "Legs", [8] = "Feet", [9] = "Wrist", [10] = "Hands", [11] = "Finger0", [12] = "Finger1", [13] = "Trinket0", [14] = "Trinket1", [15] = "Back", [16] = "MainHand", [17] = "SecondaryHand", [18] = "Ranged", [19] = "Tabard"
+        }
         for i = 1, 19 do
+            local button = CreateFrame("Button", nil, self.inspectFrame)
+            button:SetSize(32, 32)
+            button:SetPoint("TOPLEFT", 20 + ((i-1) % 5) * 70, -40 - math.floor((i-1) / 5) * 40)
+            button:SetNormalTexture("Interface\\PaperDoll\\UI-PaperDoll-Slot-Generic")
+            button:SetScript("OnEnter", function()
+                if gear[i] and gear[i] ~= "Empty" then
+                    GameTooltip:SetOwner(button, "ANCHOR_RIGHT")
+                    GameTooltip:SetHyperlink(gear[i])
+                    GameTooltip:Show()
+                end
+            end)
+            button:SetScript("OnLeave", function()
+                GameTooltip:Hide()
+            end)
+            button:SetScript("OnClick", function()
+                if gear[i] and gear[i] ~= "Empty" then
+                    if IsShiftKeyDown() then
+                        ChatEdit_InsertLink(gear[i])
+                    end
+                end
+            end)
             local text = self.inspectFrame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-            text:SetPoint("TOPLEFT", 10, -30 - (i-1)*15)
-            text:SetText("Slot " .. i .. ": ")
-            self.gearTexts[i] = text
+            text:SetPoint("BOTTOM", button, "TOP", 0, 2)
+            text:SetText(slotNames[i])
+            self.gearButtons[i] = button
         end
     end
 
     for i = 1, 19 do
-        self.gearTexts[i]:SetText("Slot " .. i .. ": " .. gear[i])
+        local button = self.gearButtons[i]
+        local link = gear[i]
+        if link and link ~= "Empty" then
+            local texture = GetItemIcon(link)
+            if texture then
+                button:SetNormalTexture(texture)
+            end
+        else
+            button:SetNormalTexture("Interface\\PaperDoll\\UI-PaperDoll-Slot-Generic")
+        end
     end
 
     self.inspectFrame:Show()
